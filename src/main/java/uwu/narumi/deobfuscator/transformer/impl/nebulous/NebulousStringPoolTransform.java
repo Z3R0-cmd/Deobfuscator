@@ -12,6 +12,8 @@ import java.util.Map;
 /**
  * Nebulous string pool transformer
  *
+ * https://github.com/Tigermouthbear/nebulous/blob/master/src/main/java/dev/tigr/nebulous/modifiers/constants/string/StringPooler.kt
+ *
  * @author Z3R0
  */
 public class NebulousStringPoolTransform extends Transformer {
@@ -21,7 +23,6 @@ public class NebulousStringPoolTransform extends Transformer {
 
             final String arrayName = "stringPoolArray";
 
-            System.out.println("Doing: " + classNode.name);
             int predictedAccessModifier = (((classNode.access & ACC_INTERFACE) != 0) ? ACC_PUBLIC : ACC_PRIVATE) | ((classNode.version > V1_8) ? 0 : ACC_FINAL) | ACC_STATIC;
 
             final FieldNode fieldNode = classNode.fields.stream()
@@ -55,9 +56,14 @@ public class NebulousStringPoolTransform extends Transformer {
             // Replace lookups with string literals
             classNode.methods.forEach(methodNode -> {
                 for (AbstractInsnNode instruction : methodNode.instructions) {
-                    if(instruction instanceof FieldInsnNode && instruction.getOpcode() == GETSTATIC && ((FieldInsnNode) instruction).owner.equals(classNode.name) && ((FieldInsnNode) instruction).name.equals(arrayName)) {
+                    if(instruction instanceof FieldInsnNode
+                            && instruction.getOpcode() == GETSTATIC
+                            && ((FieldInsnNode) instruction).owner.equals(classNode.name)
+                            && ((FieldInsnNode) instruction).name.equals(arrayName)) {
                         // Get the lookup index
                         int index = ASMHelper.getInteger(instruction.getNext());
+
+                        System.out.println("Found " + index);
 
                         // Actually insert the constant
                         methodNode.instructions.insertBefore(instruction, new LdcInsnNode(poolValues.get(index)));
@@ -69,14 +75,6 @@ public class NebulousStringPoolTransform extends Transformer {
                     }
                 }
             });
-
-            // Remove the pool
-            classNode.fields.remove(fieldNode);
-
-            // Remove the first 2 instructions to make the array, all the item insertions, and then finally the putstatic.
-            for(int i = 0; i < 3 + poolSize * 4; i++) {
-                clinit.instructions.remove(clinit.instructions.get(0));
-            }
         });
     }
 }
