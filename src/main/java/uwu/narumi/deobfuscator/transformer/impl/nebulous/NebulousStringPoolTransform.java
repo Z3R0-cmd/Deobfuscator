@@ -1,9 +1,10 @@
 package uwu.narumi.deobfuscator.transformer.impl.nebulous;
 
 import org.objectweb.asm.tree.*;
+import org.objectweb.asm.util.ASMifier;
+import org.slf4j.MarkerFactory;
 import uwu.narumi.deobfuscator.Deobfuscator;
 import uwu.narumi.deobfuscator.helper.ASMHelper;
-import uwu.narumi.deobfuscator.helper.ClassHelper;
 import uwu.narumi.deobfuscator.transformer.Transformer;
 
 import java.util.HashMap;
@@ -62,8 +63,6 @@ public class NebulousStringPoolTransform extends Transformer {
                             && ((FieldInsnNode) instruction).name.equals(arrayName)) {
                         // Get the lookup index
                         int index = ASMHelper.getInteger(instruction.getNext());
-
-                        System.out.println("Found " + index);
 
                         // Actually insert the constant
                         methodNode.instructions.insertBefore(instruction, new LdcInsnNode(poolValues.get(index)));

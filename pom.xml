@@ -14,7 +14,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
 
-        <asm.version>9.3</asm.version>
+        <asm.version>9.4</asm.version>
         <log4j.version>2.17.2</log4j.version>
         <slf4j.version>1.7.36</slf4j.version>
         <kafedjud.version>1.10.1</kafedjud.version>
@@ -86,6 +86,12 @@
             <groupId>com.github.Col-E</groupId>
             <artifactId>CAFED00D</artifactId>
             <version>${kafedjud.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>31.1-jre</version>
         </dependency>
     </dependencies>
 
