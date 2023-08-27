@@ -8,6 +8,7 @@ import org.objectweb.asm.tree.analysis.Analyzer;
 import org.objectweb.asm.tree.analysis.Frame;
 import org.objectweb.asm.tree.analysis.SourceInterpreter;
 import org.objectweb.asm.tree.analysis.SourceValue;
+import org.objectweb.asm.util.ASMifier;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -16,6 +17,10 @@ import java.util.function.Predicate;
  * Used: https://github.com/ItzSomebody/radon/blob/master/src/main/java/me/itzsomebody/radon/utils/ASMUtils.java
  */
 public class ASMHelper implements Opcodes {
+
+    public static String getOpcodeName(int opcode) {
+        return ASMifier.OPCODES[opcode];
+    }
 
     public static boolean isString(AbstractInsnNode node) {
         return node instanceof LdcInsnNode && ((LdcInsnNode) node).cst instanceof String;

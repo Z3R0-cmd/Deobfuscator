@@ -1,6 +1,7 @@
 target
 .idea
 test
+deobfuscator.log
 
 *.iml
 *.class
